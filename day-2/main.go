@@ -17,7 +17,11 @@ func main() {
 	part, path := os.Args[1], os.Args[2]
 
 	if part == "1" {
-		part1(path)
+		solve(path, false)
+	}
+
+	if part == "2" {
+		solve(path, true)
 	}
 }
 
@@ -61,16 +65,39 @@ func parse(path string) [][]int {
 	return reports
 }
 
-func part1(path string) {
+func solve(path string, dampener bool) {
 	reports := parse(path)
 
 	sum := 0
 
 	for _, report := range reports {
 		fmt.Println(report)
+
 		if safe(report) {
-			fmt.Println("Report is safe", report)
+			fmt.Println("Report is safe")
 			sum += 1
+			continue
+		}
+
+		if !dampener {
+			continue
+		}
+
+		for i := 0; i < len(report); i++ {
+			var sub []int
+
+			for ii := 0; ii < len(report); ii++ {
+				if ii == i {
+					continue
+				}
+
+				sub = append(sub, report[ii])
+			}
+
+			if safe(sub) {
+				sum += 1
+				break
+			}
 		}
 	}
 
