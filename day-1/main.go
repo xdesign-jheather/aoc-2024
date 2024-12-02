@@ -8,18 +8,21 @@ import (
 	"regexp"
 	"sort"
 	"strconv"
-	"strings"
 )
 
 func main() {
-	if len(os.Args) != 2 {
+	if len(os.Args) != 3 {
 		os.Exit(1)
 	}
 
-	path := os.Args[1]
+	part, path := os.Args[1], os.Args[2]
 
-	if strings.Contains(path, "1") {
-		puzzle1(path)
+	if part == "1" {
+		part1(path)
+	}
+
+	if part == "2" {
+		part2(path)
 	}
 }
 
@@ -65,7 +68,7 @@ func parse(path string) [2][]int {
 	return lists
 }
 
-func puzzle1(path string) {
+func part1(path string) {
 	// Parse the lists
 
 	lists := parse(path)
@@ -87,6 +90,36 @@ func puzzle1(path string) {
 		default:
 			sum += lists[1][l] - lists[0][l]
 		}
+	}
+
+	fmt.Println(sum)
+}
+
+func part2(path string) {
+	// Parse the lists
+
+	lists := parse(path)
+
+	// Count occurrences of numbers on the right
+
+	seen := map[int]int{}
+
+	for _, v := range lists[1] {
+		seen[v]++
+	}
+
+	// Now calculate the similarity score
+
+	score := map[int]int{}
+
+	for _, v := range lists[0] {
+		score[v] += seen[v] * v
+	}
+
+	sum := 0
+
+	for _, v := range score {
+		sum += v
 	}
 
 	fmt.Println(sum)
