@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"log"
+	"math"
 	"os"
 	"regexp"
 	"sort"
@@ -84,12 +85,7 @@ func part1(path string) {
 	sum := 0
 
 	for l := 0; l < len(lists[0]); l++ {
-		switch {
-		case lists[0][l] > lists[1][l]:
-			sum += lists[0][l] - lists[1][l]
-		default:
-			sum += lists[1][l] - lists[0][l]
-		}
+		sum += int(math.Abs(float64(lists[0][l] - lists[1][l])))
 	}
 
 	fmt.Println(sum)
