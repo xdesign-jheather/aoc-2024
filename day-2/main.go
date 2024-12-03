@@ -71,10 +71,8 @@ func solve(path string, dampener bool) {
 	sum := 0
 
 	for _, report := range reports {
-		fmt.Println(report)
 
 		if safe(report) {
-			fmt.Println("Report is safe")
 			sum += 1
 			continue
 		}
