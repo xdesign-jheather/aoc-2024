@@ -15,12 +15,18 @@ func main() {
 		os.Exit(1)
 	}
 
-	_, path := os.Args[1], os.Args[2]
+	part, path := os.Args[1], os.Args[2]
 
-	solve(path)
+	if part == "1" {
+		solve1(path)
+	}
+
+	if part == "2" {
+		solve2(path)
+	}
 }
 
-func solve(path string) {
+func solve1(path string) {
 	mem := parse(path)
 
 	re := regexp.MustCompile(`mul\(([0-9]+),([0-9]+)\)`)
@@ -28,10 +34,7 @@ func solve(path string) {
 	sum := 0
 
 	for _, mul := range re.FindAllStringSubmatch(mem, -1) {
-		nums := strings.Split(mul[0][4:len(mul[0])-1], ",")
-
-		n1, _ := strconv.Atoi(nums[0])
-		n2, _ := strconv.Atoi(nums[1])
+		n1, n2 := nums(mul[0])
 
 		sum += n1 * n2
 	}
@@ -51,4 +54,51 @@ func parse(path string) string {
 	data, _ := io.ReadAll(f)
 
 	return string(data)
+}
+
+func nums(input string) (int, int) {
+	operands := strings.Split(input[4:len(input)-1], ",")
+
+	n1, e1 := strconv.Atoi(operands[0])
+
+	if e1 != nil {
+		log.Fatal(e1)
+	}
+
+	n2, e2 := strconv.Atoi(operands[1])
+
+	if e2 != nil {
+		log.Fatal(e2)
+	}
+
+	return n1, n2
+}
+
+func solve2(path string) {
+	mem := parse(path)
+
+	re := regexp.MustCompile(`(mul\(([0-9]+),([0-9]+)\)|do\(\)|don't\(\))`)
+
+	enabled := true
+	sum := 0
+
+	for _, bit := range re.FindAllStringSubmatch(mem, -1) {
+
+		switch {
+		case bit[0] == "do()":
+			enabled = true
+			continue
+		case bit[0] == "don't()":
+			enabled = false
+			continue
+		case !enabled:
+			continue
+		}
+
+		n1, n2 := nums(bit[0])
+
+		sum += n1 * n2
+	}
+
+	fmt.Println(sum)
 }
