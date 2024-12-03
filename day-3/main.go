@@ -34,9 +34,7 @@ func solve1(path string) {
 	sum := 0
 
 	for _, mul := range re.FindAllStringSubmatch(mem, -1) {
-		n1, n2 := nums(mul[0])
-
-		sum += n1 * n2
+		sum += product(mul[0])
 	}
 
 	fmt.Println(sum)
@@ -56,7 +54,7 @@ func parse(path string) string {
 	return string(data)
 }
 
-func nums(input string) (int, int) {
+func product(input string) int {
 	operands := strings.Split(input[4:len(input)-1], ",")
 
 	n1, e1 := strconv.Atoi(operands[0])
@@ -71,7 +69,7 @@ func nums(input string) (int, int) {
 		log.Fatal(e2)
 	}
 
-	return n1, n2
+	return n1 * n2
 }
 
 func solve2(path string) {
@@ -95,9 +93,7 @@ func solve2(path string) {
 			continue
 		}
 
-		n1, n2 := nums(bit[0])
-
-		sum += n1 * n2
+		sum += product(bit[0])
 	}
 
 	fmt.Println(sum)
