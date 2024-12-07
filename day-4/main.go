@@ -18,6 +18,13 @@ var directions = []Letter{
 	{1, 1},
 }
 
+var starShape = []Letter{
+	{-1, 1},
+	{1, 1},
+	{1, -1},
+	{-1, -1},
+}
+
 type Letter struct {
 	Row, Col int
 }
@@ -99,6 +106,10 @@ func main() {
 	if part == "1" {
 		solve1(path)
 	}
+
+	if part == "2" {
+		solve2(path)
+	}
 }
 
 func solve1(path string) {
@@ -113,6 +124,52 @@ func solve1(path string) {
 			if ws.MatchWord(l, direction, []byte("XMAS")) {
 				count++
 			}
+		}
+	})
+
+	fmt.Println(count)
+}
+
+func solve2(path string) {
+	ws := parse(path)
+
+	count := 0
+
+	cross := func(l Letter, test string) bool {
+		for i, direction := range starShape {
+			if ws.Letter(l.Move(direction)) != test[i] {
+				return false
+			}
+		}
+
+		return true
+	}
+
+	ws.Search(func(l Letter) {
+		// Search in each direction
+
+		if ws.Letter(l) != 'A' {
+			return
+		}
+
+		if cross(l, "SSMM") {
+			count++
+			return
+		}
+
+		if cross(l, "MMSS") {
+			count++
+			return
+		}
+
+		if cross(l, "MSSM") {
+			count++
+			return
+		}
+
+		if cross(l, "SMMS") {
+			count++
+			return
 		}
 	})
 
